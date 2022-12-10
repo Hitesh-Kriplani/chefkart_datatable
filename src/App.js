@@ -1,8 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import './App.css';
 import Papa from 'papaparse';
-import { DataGrid } from '@mui/x-data-grid';
-import { Box, darken, lighten } from '@mui/material';
+import DataTable from './components/DataTable';
 
 async function GetData() {
   const data = Papa.parse(await fetchCsv());
@@ -24,7 +23,7 @@ function App() {
   const columns = [
     { field: 'id', headerName: 'ID', width: 10 },
     { field: 'first_name', headerName: 'First Name', width: 90 },
-    { field: 'last_name', headerName: 'Last Name', width: 90 },
+    { field: 'last_name', headerName: 'Last Name', width: 100 },
     { field: 'email', headerName: 'Email', width: 260 },
     { field: 'gender', headerName: 'Gender', width: 110 },
     { field: 'ip_address', headerName: 'IP Address', width: 140 },
@@ -59,51 +58,10 @@ function App() {
       setCollection(temp);
     }
   };
-  const getBackgroundColor = (color, mode) =>
-    mode === 'dark' ? darken(color, 0.6) : lighten(color, 0.6);
-
-  const getHoverBackgroundColor = (color, mode) =>
-    mode === 'dark' ? darken(color, 0.5) : lighten(color, 0.5);
   return (
-    <Box
-      sx={{
-        height: '100vh',
-        width: '100%',
-        '& .super-app-theme--TRUE': {
-          bgcolor: (theme) =>
-            getBackgroundColor(theme.palette.success.main, theme.palette.mode),
-          '&:hover': {
-            bgcolor: (theme) =>
-              getHoverBackgroundColor(
-                theme.palette.success.main,
-                theme.palette.mode
-              ),
-          },
-        },
-        '& .super-app-theme--FALSE': {
-          bgcolor: (theme) =>
-            getBackgroundColor(theme.palette.warning.main, theme.palette.mode),
-          '&:hover': {
-            bgcolor: (theme) =>
-              getHoverBackgroundColor(
-                theme.palette.warning.main,
-                theme.palette.mode
-              ),
-          },
-        },
-      }}
-    >
-      {collection && (
-        <DataGrid
-          rows={collection}
-          columns={columns}
-          pageSize={10}
-          autoHeight={true}
-          checkboxSelection
-          getRowClassName={(params) => `super-app-theme--${params.row.status}`}
-        />
-      )}
-    </Box>
+    <>
+      <DataTable collection={collection} columns={columns} />
+    </>
   );
 }
 
